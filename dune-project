@@ -17,7 +17,12 @@
  (synopsis "Bindings to Apple's virtualization framework")
  (description "Bindings to Apple's virtualization framework")
  (depends
-  (ocaml (>= 4.08.0))
-  dune
-  (odoc :with-doc)
-  ctypes))
+  (odoc :with-doc)))
+
+(package
+ (name virtu)
+ (synopsis "Simple CLI tool for starting VMs")
+ (description "Simple CLI tool for starting VMs")
+ (depends
+   virtualization
+   cmdliner))

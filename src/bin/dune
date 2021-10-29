@@ -1,5 +1,7 @@
 (executable
  (name main)
- (flags (-cclib "-framework Foundation -framework Virtualization"))
- (public_name virtualization)
+ (flags
+  (-cclib "-framework Foundation -framework Virtualization"))
+ (public_name virtu)
+ (package virtu)
  (libraries cmdliner virtualization))

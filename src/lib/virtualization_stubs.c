@@ -1,8 +1,9 @@
 #include <Virtualization/Virtualization.h>
+#include <caml/alloc.h>
+#include <caml/custom.h>
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
-
-// Network Configuration
+#define Bootloader_val(v) (*((VZLinuxBootLoader **)Data_custom_val(v)))
 
 // MAC Address
 
@@ -66,4 +67,37 @@ CAMLprim value caml_vm_set_memory_size(value val_memory_size, VZVirtualMachineCo
   CAMLreturn(Val_unit);
 }
 
+CAMLprim value caml_vm_set_bootloader(value val_bootloader, VZVirtualMachineConfiguration *conf)
+{
+  CAMLparam1(val_bootloader);
+  VZLinuxBootLoader *lbl = Bootloader_val(val_bootloader);
+  [conf setBootLoader:lbl];
+  CAMLreturn(Val_unit);
+}
 
+static struct custom_operations bootloader_ops = {
+  "virtualization.bootloader",
+  custom_finalize_default,
+  custom_compare_default,
+  custom_hash_default,
+  custom_serialize_default,
+  custom_deserialize_default,
+  custom_compare_ext_default,
+  custom_fixed_length_default,
+};
+
+
+// Linux Boot Loader, we allocate a pointer and save it
+CAMLprim value caml_linux_boot_loader(value val_kernel_path)
+{
+  CAMLparam1(val_kernel_path);
+  CAMLlocal1(v_bl);
+  const char *path = String_val(val_kernel_path);
+  NSString *url = [NSString stringWithUTF8String:path];
+  NSURL *kernelURL = [NSURL fileURLWithPath:url];
+  // patricoferris: Do we need to retain this... I never know...
+  VZLinuxBootLoader *lbl = [[VZLinuxBootLoader alloc] initWithKernelURL:kernelURL];
+  v_bl = caml_alloc_custom(&bootloader_ops, sizeof(VZLinuxBootLoader *), 0, 1);
+  Bootloader_val(v_bl) = lbl;
+  CAMLreturn(v_bl);
+}

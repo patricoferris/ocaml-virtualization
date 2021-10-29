@@ -1,10 +1,11 @@
 (library
  (name virtualization)
-  (public_name virtualization)
-  (c_library_flags (-ObjC))
-  (foreign_stubs
-    (language c)
-    (flags
-      (:standard -framework Virtualization -O -g -std=c99 -pedantic-errors -Wsign-compare -Wshadow
-  	         -Wno-unguarded-availability-new -Wc11-extensions -x objective-c))
-    (names virtualization_stubs)))
+ (public_name virtualization)
+ (c_library_flags (-ObjC))
+ (foreign_stubs
+  (language c)
+  (flags
+   (:standard -framework Virtualization -O -g -std=c99 -pedantic-errors
+     -Wsign-compare -Wshadow -Wno-unguarded-availability-new -Wc11-extensions
+     -x objective-c))
+  (names virtualization_stubs)))
