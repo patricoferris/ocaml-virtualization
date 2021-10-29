@@ -1,15 +1,27 @@
-(** Bindings to Apple\&apos;s virtualization framework *)
+module Network : sig 
+  module Macaddr : sig 
+    type t
+    val create : unit -> t
+  end
+  type t 
 
-val printf : string -> unit
-(** Print a string to the standard output.
+  val create : ?macaddr:Macaddr.t -> unit -> t
+end
 
-    {4 Examples}
 
-    {[ printf "Hello World!" ]} *)
+module Serial : sig
+  type t
+  module Virtio : sig
+    type t
+    val create : unit -> t
+  end
+  val create : unit -> t
+end
 
-val greet : string -> string
-(** Returns a greeting message.
+module Config : sig 
+  type t
 
-    {4 Examples}
-
-    {[ print_endline @@ greet "Jane" ]} *)
+  val create : cpus:int -> memory_size:int -> t
+  (** Creates a new virtual machine configuration object with the specified
+      configuration options. *) 
+end

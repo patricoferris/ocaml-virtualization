@@ -1,29 +1,7 @@
-# virtualization
+ocaml-virtualization
+--------------------
 
-Bindings to Apple's virtualization framework
+Bindings to Apple's virtualization framework (WIP & Experimental)
 
-## Installation
-
-### Using Opam
-
-```bash
-opam install inquire
-```
-
-### Using Esy
-
-```bash
-esy add @opam/inquire
-```
-
-## Usage
-
-### In OCaml
-
-```ocaml
-let () = Virtualization.printf "World"
-```
-
-## Contributing
-
-Take a look at our [Contributing Guide](CONTRIBUTING.md).
+Also included is a CLI tool for running VMs on macOS. Note this requires macOS 11+ (Big Sur and up). Eventually (hopefully)
+the macOS boot loader will be supported which is 12+ (Monterey and up).

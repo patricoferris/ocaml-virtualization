@@ -1,34 +1,10 @@
-(rule
- (targets virtualization_generated_stubs.ml)
- (action
-  (run stubs/gen_stubs.exe ml %{targets})))
-
-(rule
- (targets virtualization_generated_stubs.c)
- (action
-  (run stubs/gen_stubs.exe c %{targets})))
-
 (library
  (name virtualization)
- (public_name virtualization)
- (libraries ctypes virtualization.stubs)
- (foreign_stubs
-  (language c)
-  (flags
-   (:standard
-    -O
-    -g
-    -std=c99
-    -pedantic-errors
-    -Wsign-compare
-    -Wshadow
-    -Wno-unguarded-availability-new
-    -Wc11-extensions
-    -mmacosx-version-min=10.14
-    -framework Foundation
-    -framework Virtualization
-    -x
-    objective-c))
-  (names virtualization_generated_stubs))
- (flags
-  (:standard -w -4)))
+  (public_name virtualization)
+  (c_library_flags (-ObjC))
+  (foreign_stubs
+    (language c)
+    (flags
+      (:standard -framework Virtualization -O -g -std=c99 -pedantic-errors -Wsign-compare -Wshadow
+  	         -Wno-unguarded-availability-new -Wc11-extensions -x objective-c))
+    (names virtualization_stubs)))
