@@ -29,6 +29,19 @@ void caml_network_set_macaddress(VZMACAddress *macaddr, VZNetworkDeviceConfigura
 }
 
 // Serial Port Configuration
+
+CAMLprim value caml_set_serial_port_attachment(value val_read, value val_write, VZVirtioConsoleDeviceSerialPortConfiguration *conf)
+{
+  CAMLparam2(val_read, val_write);
+  int read = Val_int(val_read);
+  int write = Val_int(val_write);
+  NSFileHandle *in = [[NSFileHandle alloc] initWithFileDescriptor:read];
+  NSFileHandle *out = [[NSFileHandle alloc] initWithFileDescriptor:write];
+  VZSerialPortAttachment *pa = [[VZSerialPortAttachment alloc] initWithFileHandleForReading:in fileHandleForWriting:out];
+  [conf setAttachment:pa];
+  CAMLreturn(Val_unit);
+}
+
 VZSerialPortConfiguration *caml_serial_configuration(void)
 {
   VZSerialPortConfiguration *conf = [[VZSerialPortConfiguration alloc] init];
@@ -72,6 +85,14 @@ CAMLprim value caml_vm_set_bootloader(value val_bootloader, VZVirtualMachineConf
   CAMLparam1(val_bootloader);
   VZLinuxBootLoader *lbl = Bootloader_val(val_bootloader);
   [conf setBootLoader:lbl];
+  CAMLreturn(Val_unit);
+}
+
+
+CAMLprim value caml_vm_set_serial_port_virtio(VZVirtioConsoleDeviceSerialPortConfiguration *spc, VZVirtualMachineConfiguration *conf)
+{
+  CAMLparam0();
+  [conf setSerialPorts:@[spc]];
   CAMLreturn(Val_unit);
 }
 

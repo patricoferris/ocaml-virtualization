@@ -4,4 +4,4 @@
   (-cclib "-framework Foundation -framework Virtualization"))
  (public_name virtu)
  (package virtu)
- (libraries cmdliner virtualization))
+ (libraries unix cmdliner virtualization))

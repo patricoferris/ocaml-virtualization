@@ -32,6 +32,12 @@ module Serial = struct
     type t
 
     external create : unit -> t = "caml_virtio_serial_configuration"
+
+    external ext_set_input_output :
+      Unix.file_descr -> Unix.file_descr -> t -> unit
+      = "caml_set_serial_port_attachment"
+
+    let set_input_output ~input ~output t = ext_set_input_output input output t
   end
 
   external create : unit -> t = "caml_serial_configuration"
@@ -49,10 +55,14 @@ module Config = struct
   external set_bootloader : Bootloader.Linux.t -> t -> unit
     = "caml_vm_set_bootloader"
 
-  let create ~cpus ~memory_size ~bootloader =
+  external set_serial_virtio_port : Serial.Virtio.t -> t -> unit
+    = "caml_vm_set_serial_port_virtio"
+
+  let create ?serial_virtio_port ~cpus ~memory_size ~bootloader () =
     let conf = ext_create () in
     set_cpu_count cpus conf;
     set_memory_size (memory_size * 1024 * 1024) conf;
     set_bootloader bootloader conf;
+    Option.iter (fun v -> set_serial_virtio_port v conf) serial_virtio_port;
     conf
 end

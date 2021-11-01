@@ -25,7 +25,9 @@ let kernel_url_term =
 let run cpus memory_size kernel_url =
   let open Virtualization in
   let bootloader = Bootloader.Linux.create kernel_url in
-  let _conf = Virtualization.Config.create ~cpus ~memory_size ~bootloader in
+  let _conf = Config.create ~cpus ~memory_size ~bootloader in
+  let serial = Serial.Virtio.create () in
+  Serial.Virtio.set_input_output ~input:Unix.stdin ~output:Unix.stdout serial;
   ()
 
 let term =

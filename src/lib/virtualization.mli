@@ -26,6 +26,9 @@ module Serial : sig
     type t
 
     val create : unit -> t
+
+    val set_input_output :
+      input:Unix.file_descr -> output:Unix.file_descr -> t -> unit
   end
 
   val create : unit -> t
@@ -34,7 +37,13 @@ end
 module Config : sig
   type t
 
-  val create : cpus:int -> memory_size:int -> bootloader:Bootloader.Linux.t -> t
+  val create :
+    ?serial_virtio_port:Serial.Virtio.t ->
+    cpus:int ->
+    memory_size:int ->
+    bootloader:Bootloader.Linux.t ->
+    unit ->
+    t
   (** Creates a new virtual machine configuration object with the specified
       configuration options. *)
 end
